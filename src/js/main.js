@@ -360,6 +360,11 @@ window.addEventListener("DOMContentLoaded", () => {
             modalClose();
         }, 4000);
     }
+    // Получаем доступ к базе данные db.json
+    fetch("http://localhost:3000/menu")
+        .then(data => data.json())
+        .then(res => console.log(res));
+
 
     // fetch("https://jsonplaceholder.typicode.com/posts", { // Классический post запрос 
     //     method: "POST",
