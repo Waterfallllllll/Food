@@ -191,36 +191,80 @@ window.addEventListener("DOMContentLoaded", () => {
     // const div = new MenuCard();
     // div.render();
 
-    new MenuCard(
-        "img/tabs/vegy.jpg",
-        "vegy",
-        "Меню \"Фитнес\"",
-        "Меню \"Фитнес\" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.Продукт активных и здоровых людей.Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
-        9,
-        ".menu .container",
-        "menu__item",
-        "big"
-    ).render();
+    const getResource = async (url) => {
+        const res = await fetch(url);
+        // fetch если столкнется с какой-то ошибкой в http запросе(404, 500, 502 и так далее), то он нам не выдаст catch(не выдаст reject). Это не будет для него ошибкой, ошибкой для него является отсуствие интернета, или какие-то критические неполадки в самом запросе. Поэтому такое поведение мы должны в ручную обработать. Тут мы знакомимся с двумя свойствами которые есть у промиса которые возвращаются из fetch. 1) .ok - говорит о том, что мы что-то получили и все ок, либо не ок. 2) status - тут мы попадаем на тот статус который выдал нам сервер. Это может 200(ок), 404(not found), 500 и так далее.
 
-    new MenuCard(
-        "img/tabs/vegy.jpg",
-        "vegy",
-        "Меню \"Фитнес\"",
-        "Меню \"Фитнес\" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.Продукт активных и здоровых людей.Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
-        9,
-        ".menu .container",
-        "menu__item"
-    ).render();
+        if (!res.ok) {
+            // Тут мы знакомимся с объектом ошибки. new Error(). Для того, чтобы выкинуть ошибку нужен throw. Это как раз те ошибки которые выпадают нам в консоль и мы можем их видеть. Сейчас мы просто конструируем её руками.
+            throw new Error(`Could not fetch ${url}, status: ${res.status}`); 
+        } 
 
-    new MenuCard(
-        "img/tabs/vegy.jpg",
-        "vegy",
-        "Меню \"Фитнес\"",
-        "Меню \"Фитнес\" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.Продукт активных и здоровых людей.Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
-        9,
-        ".menu .container",
-        "menu__item"
-    ).render();
+        return await res.json(); // Тут у нас возвращается промис. Мы не знаем, какой там большой объект мы обрабатываем. Поэтому тут тоже нужен await.
+    };
+
+    getResource("http://localhost:3000/menu")
+        .then(data => {
+            data.forEach(({img, altimg, title, descr, price}) => { // Деструктуризация объекта
+                new MenuCard(img, altimg, title, descr, price, ".menu .container").render();
+            });
+        });
+
+    
+    // Этот метод не использует классы, а просто формирует верстку на лету.
+    // getResource('http://localhost:3000/menu')
+    //     .then(data => createCard(data));
+
+    // function createCard(data) {
+    //     data.forEach(({img, altimg, title, descr, price}) => {
+    //         const element = document.createElement('div');
+
+    //         element.classList.add("menu__item");
+
+    //         element.innerHTML = `
+    //             <img src=${img} alt=${altimg}>
+    //             <h3 class="menu__item-subtitle">${title}</h3>
+    //             <div class="menu__item-descr">${descr}</div>
+    //             <div class="menu__item-divider"></div>
+    //             <div class="menu__item-price">
+    //                 <div class="menu__item-cost">Цена:</div>
+    //                 <div class="menu__item-total"><span>${price}</span> грн/день</div>
+    //             </div>
+    //         `;
+    //         document.querySelector(".menu .container").append(element);
+    //     });
+    // }
+    
+    // new MenuCard(
+    //     "img/tabs/vegy.jpg",
+    //     "vegy",
+    //     "Меню \"Фитнес\"",
+    //     "Меню \"Фитнес\" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.Продукт активных и здоровых людей.Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
+    //     9,
+    //     ".menu .container",
+    //     "menu__item",
+    //     "big"
+    // ).render();
+
+    // new MenuCard(
+    //     "img/tabs/vegy.jpg",
+    //     "vegy",
+    //     "Меню \"Фитнес\"",
+    //     "Меню \"Фитнес\" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.Продукт активных и здоровых людей.Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
+    //     9,
+    //     ".menu .container",
+    //     "menu__item"
+    // ).render();
+
+    // new MenuCard(
+    //     "img/tabs/vegy.jpg",
+    //     "vegy",
+    //     "Меню \"Фитнес\"",
+    //     "Меню \"Фитнес\" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов.Продукт активных и здоровых людей.Это абсолютно новый продукт с оптимальной ценой и высоким качеством!",
+    //     9,
+    //     ".menu .container",
+    //     "menu__item"
+    // ).render();
 
     //Forms
 
@@ -233,10 +277,22 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: data
+        });
+
+        return await res.json(); // Тут у нас возвращается промис. Мы не знаем, какой там большой объект мы обрабатываем. Поэтому тут тоже нужен await.
+    };
+
+    function bindPostData(form) {
         form.addEventListener("submit", (e) => {
             e.preventDefault();
 
@@ -308,23 +364,25 @@ window.addEventListener("DOMContentLoaded", () => {
             
             
             // JSON метод   
-            const formData = new FormData(form);
+            const formData = new FormData(form); // Собираем все данный с формы
 
-            const object = {};
+            // const object = {};
 
-            formData.forEach((value, key) => {
-                object[key] = value;
-            });
+            // formData.forEach((value, key) => {
+            //     object[key] = value;
+            // });
 
-            // const json = JSON.stringify(object);    
-            
-            fetch("server.php", { // Отправляем наши данные.
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json"
-                },
-                body: JSON.stringify(object)
-            }).then(data => data.text()) // переделываем наш ответ в обычный текст.
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));  
+            // Берём нашу formData, превращаем в массив массивов для того, чтобы мы могли нормально работать с ней. После этого мы превращаем её в классический объект, а после этот объект превращаем в JSON 
+
+
+            // Пример:
+            // const obj = { a: 23, b: 50 };
+            // console.log(Object.entries(obj));
+            // Ответ: [["a", 23], ["b", 50]]
+            // fromentries - из вот такой структуры [["a", 23], ["b", 50]], сделать обычный объект. Обратная операция
+
+            postData("http://localhost:3000/requests", json)
                 .then(data => { // Обрабатываем результат нашего запроса
                     console.log(data);
                     showThanksModal(message.success);
@@ -363,7 +421,7 @@ window.addEventListener("DOMContentLoaded", () => {
     // Получаем доступ к базе данные db.json
     fetch("http://localhost:3000/menu")
         .then(data => data.json())
-        .then(res => console.log(res));
+        .then(res => console.log(res)); 
 
 
     // fetch("https://jsonplaceholder.typicode.com/posts", { // Классический post запрос 
