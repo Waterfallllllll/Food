@@ -269,7 +269,7 @@ window.addEventListener("DOMContentLoaded", () => {
     //Forms
 
     const forms = document.querySelectorAll("form");
-    console.log(forms);
+    // console.log(forms);
     const message = {
         loading: "img/form/spinner.svg",
         success: "Спасибо, скоро мы с вами свяжимся",
