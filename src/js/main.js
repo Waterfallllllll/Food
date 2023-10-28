@@ -203,12 +203,17 @@ window.addEventListener("DOMContentLoaded", () => {
         return await res.json(); // Тут у нас возвращается промис. Мы не знаем, какой там большой объект мы обрабатываем. Поэтому тут тоже нужен await.
     };
 
-    getResource("http://localhost:3000/menu")
-        .then(data => {
-            data.forEach(({img, altimg, title, descr, price}) => { // Деструктуризация объекта
-                new MenuCard(img, altimg, title, descr, price, ".menu .container").render();
-            });
-        });
+    // getResource("http://localhost:3000/menu")
+    //     .then(data => {
+    //         data.forEach(({img, altimg, title, descr, price}) => { // Деструктуризация объекта
+    //             new MenuCard(img, altimg, title, descr, price, ".menu .container").render();
+    //         });
+    //     });
+
+    axios.get("http://localhost:3000/menu")
+        .then(data => data.data.forEach(({img, altimg, title, descr, price}) => { // Деструктуризация объекта. Обращаемся к тем данным которые мы получили от библиотеки axios.
+            new MenuCard(img, altimg, title, descr, price, ".menu .container").render();
+        }));
 
     
     // Этот метод не использует классы, а просто формирует верстку на лету.
