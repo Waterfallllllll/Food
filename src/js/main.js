@@ -423,6 +423,42 @@ window.addEventListener("DOMContentLoaded", () => {
             modalClose();
         }, 4000);
     }
+
+    //Slider
+
+    const sliderPrev = document.querySelector(".offer__slider-prev"),
+        sliderNext = document.querySelector(".offer__slider-next"),
+        sliders = document.querySelectorAll(".offer__slide"),
+        current = document.getElementById("current"),
+        total = document.getElementById("total");
+    let slideIndex = 1;
+    
+    function showSlides(n) {
+        if (n > sliders.length) {
+            slideIndex = 1;
+        }
+
+        if (n < 1) {
+            slideIndex = sliders.length;
+        }
+
+        sliders.forEach(item => {
+            item.style.display = "none";
+        });
+
+        sliders[slideIndex - 1].style.display = "block"; 
+    }
+
+    showSlides(slideIndex);
+
+    sliderPrev.addEventListener("click", () => {
+        showSlides(--slideIndex);
+    });
+
+    sliderNext.addEventListener("click", () => {
+        showSlides(++slideIndex);
+    });
+
     // Получаем доступ к базе данные db.json
     // fetch("http://localhost:3000/menu")
     //     .then(data => data.json())
