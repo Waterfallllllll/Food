@@ -502,10 +502,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
     sliderNext.addEventListener("click", () => {
 
-        if (offset == +width.slice(0, width.length - 2) * (sliders.length - 1)) { // С width мы получаем "500px" - это строка, а нужно число и без пикселей.
+        if (offset == elementReplace(width) * (sliders.length - 1)) { // С width мы получаем "500px" - это строка, а нужно число и без пикселей.
             offset = 0;
         } else {
-            offset += +width.slice(0, width.length - 2);
+            offset += elementReplace(width);
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`; // Говорим, смещаемся влево 
@@ -519,6 +519,10 @@ window.addEventListener("DOMContentLoaded", () => {
         viewCurrentSlider();
         dotsAction();
     });
+
+    function elementReplace(e) {
+        return +e.replace(/\D/g, "");
+    }
 
     function dotsAction() {
         dots.forEach(dot => dot.style.opacity = "0.5");
@@ -536,9 +540,9 @@ window.addEventListener("DOMContentLoaded", () => {
     sliderPrev.addEventListener("click", () => {
 
         if (offset == 0) { // С width мы получаем "500px" - это строка, а нужно число и без пикселей.
-            offset = +width.slice(0, width.length - 2) * (sliders.length - 1);  
+            offset = elementReplace(width) * (sliders.length - 1);  
         } else {
-            offset -= +width.slice(0, width.length - 2);
+            offset -= elementReplace(width);
         }
 
         slidesField.style.transform = `translateX(-${offset}px)`; // Говорим, смещаемся влево
@@ -558,7 +562,7 @@ window.addEventListener("DOMContentLoaded", () => {
             const slideTo = e.target.getAttribute("data-slide-to");
 
             slideIndex = slideTo;
-            offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            offset = elementReplace(width) * (slideTo - 1);
 
             slidesField.style.transform = `translateX(-${offset}px)`;
 
