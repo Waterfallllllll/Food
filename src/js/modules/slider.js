@@ -1,14 +1,14 @@
-function slider() {
+function slider({container, slide, nextArrow, prevArrow, totalCounter, currentCounter, wrapper, field}) {
     //Slider
 
-    const sliderPrev = document.querySelector(".offer__slider-prev"),
-        slider = document.querySelector(".offer__slider"),
-        sliderNext = document.querySelector(".offer__slider-next"),
-        sliders = document.querySelectorAll(".offer__slide"),
-        current = document.getElementById("current"),
-        total = document.getElementById("total"),
-        slidesWrapper = document.querySelector(".offer__slider-wrapper"),
-        slidesField = document.querySelector(".offer__slider-inner"), // Этот блок мы будем сдвигать либо влево, либо вправо.
+    const sliderPrev = document.querySelector(prevArrow),
+        slider = document.querySelector(container),
+        sliderNext = document.querySelector(nextArrow),
+        sliders = document.querySelectorAll(slide),
+        current = document.getElementById(currentCounter),
+        total = document.getElementById(totalCounter),
+        slidesWrapper = document.querySelector(wrapper),
+        slidesField = document.querySelector(field), // Этот блок мы будем сдвигать либо влево, либо вправо.
         width = window.getComputedStyle(slidesWrapper).width; // Когда мы будем инициализировать наш слайдер, нам понадобится знать, сколько места у нас занимает .offer__slider-wrapper, окошко через которое мы будем видеть наши слайды. Именно на ширину этого блока мы будем ориентироваться, когда будем подстраивать наши слайды под него уже внутри. Поэтому нам необходимо получить ширину которая была применина к этому блоку. Ширину возможно получить через computed style, это примененные стили которые идут от нашего css. Мы можем получать их при помощи скриптов. slidesWrapper - это общее окошко через которое мы будем смотреть на слайды. window.getComputedStyle(slidesWrapper) - вытаскиваем объект. Указываем свойство width, чтобы получить это свойство у объекта.
         
     
@@ -169,4 +169,4 @@ function slider() {
     // });
 }
 
-module.exports = slider;
+export default slider;

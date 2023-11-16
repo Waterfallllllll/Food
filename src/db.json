@@ -78,6 +78,26 @@
         "header": "H2",
         "content": "Наше меню на день"
       }
-    ]
+    ],
+    {
+      "name": "sasun",
+      "phone": "+373 799 47 194",
+      "id": 7
+    },
+    {
+      "name": "sasun",
+      "phone": "+373 799 47 194",
+      "id": 8
+    },
+    {
+      "name": "asdf",
+      "phone": "asdf",
+      "id": 9
+    },
+    {
+      "name": "sasun",
+      "phone": "+373 799 47 194",
+      "id": 10
+    }
   ]
 }
