@@ -16,6 +16,6 @@ window.addEventListener("DOMContentLoaded", () => {
     forms();
     slider();
     timer();
-    ss
+    
 });
 
