@@ -8,7 +8,7 @@ This project was created for personal practice in utilizing JavaScript and vario
 5. Tabs
 6. Timer
 
-## Технологии
+## Technologies
 
 #### Web-Pack
 
