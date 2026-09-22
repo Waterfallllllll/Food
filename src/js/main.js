@@ -34,6 +34,6 @@ window.addEventListener("DOMContentLoaded", () => {
         wrapper: ".offer__slider-wrapper",
         field: ".offer__slider-inner"
     });
-    timer(".timer", "2024-11-11");
+    timer(".timer", "2026-12-31");
 });
 

@@ -2117,7 +2117,7 @@ window.addEventListener("DOMContentLoaded", () => {
     wrapper: ".offer__slider-wrapper",
     field: ".offer__slider-inner"
   });
-  (0,_modules_timer__WEBPACK_IMPORTED_MODULE_7__["default"])(".timer", "2024-11-11");
+  (0,_modules_timer__WEBPACK_IMPORTED_MODULE_7__["default"])(".timer", "2026-12-31");
 });
 }();
 /******/ })()

@@ -1,30 +1,104 @@
 # Food
 
-This project was created for personal practice in utilizing JavaScript and various additional technologies. Here you can find implementations of:
-1. Calculator
-2. Modal windows
-3. Forms
-4. Slider
-5. Tabs
-6. Timer
+Лендинг сервиса доставки питания. Проект сделан для практики JavaScript и сборки фронтенда: модули ES6, Webpack, Babel, Gulp и json-server.
 
-## Technologies
+На странице реализованы:
 
-#### Web-Pack
+1. Калькулятор суточной нормы калорий
+2. Модальные окна
+3. Формы обратной связи
+4. Слайдер
+5. Табы выбора меню
+6. Таймер акции
+7. Карточки меню с сервера
+8. Баннер согласия на cookies
 
-In this project, I utilized modules with ES6 Modules syntax. Modules are necessary to segment JavaScript files for specific tasks. This is essential for ease of editing and readability of the JavaScript code. Otherwise, you might find it unpleasant to read and edit a JavaScript file with 20,000 lines or more. I also used babel and core-js polyfills as a module. Now my project can work not only on the latest browser versions but also on older ones.
+## Как устроен проект
 
-## Installation
+Исходники лежат в `src/`. Страница подключает собранный `src/js/bundle.js`, а не модули напрямую.
 
-To use this project, you'll need to:
+| Инструмент | Зачем |
+|---|---|
+| **Webpack** | Собирает `src/js/main.js` и модули из `src/js/modules/` в `src/js/bundle.js`. Babel и core-js добавляют полифилы для старых браузеров |
+| **Gulp** | Компилирует Sass в `src/css/style.min.css` и поднимает локальный сервер (BrowserSync) из папки `src` |
+| **json-server** | Имитирует бэкенд. Читает **`src/db.json`** (не файл `db.json` в корне репозитория, если он ещё есть) |
 
-1. Clone this project to your computer using the command (git clone https://github.com/Waterfallllllll/Food.git your_folder)
-2. Next, download all npm packages. In this project, we have 2 npm packages, so you'll need to type (npm i) in the terminal for the root folder. Then, navigate to the webpack-demo folder using the command (cd webpack-demo) and again type (npm i).
+OpenServer и PHP (`server.php`) для текущей версии **не нужны**: формы и карточки ходят на json-server через `fetch`.
 
-## Usage
+## Установка
 
-To ensure the project runs smoothly, we need to start certain technologies:
+```bash
+git clone https://github.com/Waterfallllllll/Food.git
+cd Food
+npm i
+```
 
-1. If you wish to edit or add something to JavaScript, start webpack (npx webpack) to track your edits.
-2. Also, for our modal windows and forms to function properly, start the json server (json-server src/db.json). Our forms retrieve data from the db.json database, while the modal windows write the entered data to the db.json database.
-3. You'll also need to have openserver for the submission of data from the modal windows to work. The combination of json-server and openserver mimics the functioning of a real hosting environment.
+Достаточно установки в **корне** проекта. Отдельные папки вроде `webpack-demo` к лендингу не относятся.
+
+Если команда `npx webpack` не находит Webpack, установите его в корень:
+
+```bash
+npm i -D webpack
+```
+
+## Запуск
+
+Нужны два (при правке JS — три) процесса.
+
+**1. Страница и стили**
+
+```bash
+npx gulp
+```
+
+Откроется локальный сервер с содержимым `src`.
+
+**2. API (меню и заявки)**
+
+```bash
+npx json-server src/db.json
+```
+
+Сервер по умолчанию слушает `http://localhost:3000`.
+
+**3. Сборка JavaScript** (если меняете файлы в `src/js/`, кроме уже собранного бандла)
+
+```bash
+npx webpack
+```
+
+Webpack в этом проекте работает в режиме `watch`: после запуска сам пересобирает `bundle.js` при изменениях.
+
+### Что от чего зависит
+
+Работают без json-server: табы, слайдер, калькулятор, модалка, таймер, cookies.
+
+Нужен json-server:
+
+- блок **«Наше меню на день»** — GET `http://localhost:3000/menu`
+- формы внизу страницы и в модалке — POST `http://localhost:3000/requests`
+
+Если API не запущен, карточки не появятся, а отправка формы покажет сообщение об ошибке.
+
+## Полезные правки
+
+**Таймер акции.** Дата окончания задаётся вторым аргументом в `src/js/main.js`:
+
+
+Формат: `ГГГГ-ММ-ДД` или `ГГГГ-ММ-ДДTЧЧ:ММ:СС`. Если дата уже прошла, на сайте будут нули. Текст в HTML («акция закончится…») от таймера не берётся — его нужно менять отдельно в `src/index.html`.
+
+**База данных.** Меню и заявки — только в `src/db.json`. 
+## Структура JavaScript
+
+Точка входа — `src/js/main.js`. Модули:
+
+- `tabs.js` — переключение стилей питания
+- `modal.js` — открытие по кнопке, по Escape, по скроллу вниз и по таймеру (50 секунд)
+- `calc.js` — расчёт калорий, пол и активность пишутся в `localStorage`
+- `cards.js` — карточки меню с API
+- `forms.js` — отправка заявок на API
+- `slider.js` — карусель с точками
+- `timer.js` — обратный отсчёт
+- `services/services.js` — `getResource` и `postData`
+
+Баннер cookies подключается отдельно: `src/js/cookieConsent.js` и `src/css/cookieConsent.css`.
