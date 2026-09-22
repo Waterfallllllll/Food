@@ -23,7 +23,6 @@
 | **Gulp** | Компилирует Sass в `src/css/style.min.css` и поднимает локальный сервер (BrowserSync) из папки `src` |
 | **json-server** | Имитирует бэкенд. Читает **`src/db.json`** (не файл `db.json` в корне репозитория, если он ещё есть) |
 
-OpenServer и PHP (`server.php`) для текущей версии **не нужны**: формы и карточки ходят на json-server через `fetch`.
 
 ## Установка
 
