@@ -4,15 +4,15 @@
 let path = require("path");
 
 module.exports = {
-    mode: "development",
+    mode: "production",
     entry: "./src/js/main.js",
     output: {
         filename: "bundle.js",
         path: __dirname + "/src/js"
     },
-    watch: true,
+    watch: false,
 
-    devtool: "source-map",
+    devtool: false,
 
     module: { // Какие модули будем использовать
         rules: [ // Правила в виде массива, которые будут действовать для определенных файлов.
@@ -23,7 +23,7 @@ module.exports = {
                     loader: "babel-loader", // Это дополнительная технология которая будет связывать наш webpack вместе с babel. И чтобы всё это работало нам понадобится его установить(npm i --save-dev babel-loader).
                     options: { // Описываем опции которые будут использоваться.
                         presets: [["@babel/preset-env", {   
-                            debug: true,    // Позволяет прямо во время компиляции увидеть что там происходит, какие могут быть проблемы и так далее
+                            debug: false,
                             corejs: 3,  // Нам ещё нужна библиотека которая подключает все возможные полифилы. И у неё есть приятная фишка. Допустим у меня есть все полифилы которые установлены с babel. Некоторые из них мне не нужны, и библиотека core-js(npm i --save-dev core-js) позволяет просмотреть весь код, и выбрать полифилы которые нам нужны, а остальные выкинуть.
                             useBuiltIns: "usage" // Позволяет выбрать полифилы которые мне нужны.
                         }]]
